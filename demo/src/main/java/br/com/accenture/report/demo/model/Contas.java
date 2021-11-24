@@ -2,20 +2,25 @@ package br.com.accenture.report.demo.model;
 
 import com.sun.istack.NotNull;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 
-@Entity(name = "Conta")
+@Entity(name = "conta")
 @Data
+@Getter @Setter
 public class Contas implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_conta")
+    @Column(name = "conta_id")
     private Long idConta;
 
     @NotNull
@@ -28,7 +33,7 @@ public class Contas implements Serializable {
 
     @NotNull
     @Column(name = "data")
-    private Date contaData;
+    private LocalDate contaData;
 
     @NotNull
     @Column(name = "tipo_compra")
@@ -40,65 +45,49 @@ public class Contas implements Serializable {
     @Column(name = "mes")
     private String contaMes;
 
+    @OneToMany(mappedBy = "conta")
+    private List<Parcela> parcela;
+
+//    @Transient
+//    private Integer contaParcela;
+
+    @Transient
+    private double contaValorParcela;
+
     public Contas(){
 
     }
 
-    public Contas(String contaDescricao, double contaValor, Date contaData, String contaTipoCompra, int contaParcelas, String contaMes){
+    public Contas(String contaDescricao, double contaValor, LocalDate contaData, String contaTipoCompra, Integer contaParcelas, String contaMes){
         this.contaDescricao = contaDescricao;
         this.contaValor = contaValor;
         this.contaData = contaData;
         this.contaTipoCompra = contaTipoCompra;
         this.contaParcelas = contaParcelas;
         this.contaMes = contaMes;
+
     }
 
-    public String getContaDescricao() {
-        return contaDescricao;
+
+//    public Integer getContaParcela() {
+//        return contaParcela;
+//    }
+//
+//    public void setContaParcela(Integer contaParcela) {
+//        this.contaParcela = contaParcela;
+//    }
+
+    public double getContaValorParcela() {
+        if(this.contaParcelas != null){
+            contaValorParcela = this.contaValor/this.contaParcelas;
+        } else {
+            this.contaValorParcela = this.contaValor;
+        }
+        return contaValorParcela;
     }
 
-    public void setContaDescricao(String contaDescricao) {
-        this.contaDescricao = contaDescricao;
-    }
-
-    public double getContaValor() {
-        return contaValor;
-    }
-
-    public void setContaValor(double contaValor) {
-        this.contaValor = contaValor;
-    }
-
-    public Date getContaData() {
-        return contaData;
-    }
-
-    public void setContaData(Date contaData) {
-        this.contaData = contaData;
-    }
-
-    public String getContaTipoCompra() {
-        return contaTipoCompra;
-    }
-
-    public void setContaTipoCompra(String contaTipoCompra) {
-        this.contaTipoCompra = contaTipoCompra;
-    }
-
-    public Integer getContaParcelas() {
-        return contaParcelas;
-    }
-
-    public void setContaParcelas(Integer contaParcelas) {
-        this.contaParcelas = contaParcelas;
-    }
-
-    public String getContaMes() {
-        return contaMes;
-    }
-
-    public void setContaMes(String contaMes) {
-        this.contaMes = contaMes;
+    public void setContaValorParcela(double contaValorParcela) {
+        this.contaValorParcela = contaValorParcela;
     }
 
     @Override

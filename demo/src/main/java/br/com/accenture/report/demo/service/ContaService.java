@@ -1,6 +1,8 @@
 package br.com.accenture.report.demo.service;
 
+import br.com.accenture.report.demo.model.Parcela;
 import br.com.accenture.report.demo.repository.ContaRepository;
+import br.com.accenture.report.demo.repository.ParcelaRepository;
 import ch.qos.logback.core.net.server.Client;
 import lombok.Data;
 import br.com.accenture.report.demo.model.Contas;
@@ -10,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,6 +22,8 @@ public class ContaService {
 
     @Autowired
     private ContaRepository contaRepository;
+    @Autowired
+    private ParcelaRepository parcelaRepository;
 
     //MÉTODO PARA BUSCAR TODAS AS CONTAS
     public List<Contas> buscarContas(){
@@ -25,9 +31,44 @@ public class ContaService {
     }
 
     //METODO PARA SALVAR CONTA
+//    public void salvarConta(Contas conta){
+//        this.contaRepository.save(conta);
+//    }
+
+    //METODO PARA SALVAR CONTA
     public void salvarConta(Contas conta){
-        this.contaRepository.save(conta);
+
+        Contas novaConta = this.contaRepository.save(conta);
+        if(conta.getContaTipoCompra().equals("mensal")){
+            for (int i = 1; i <= conta.getContaParcelas(); i++){
+                Parcela parcela = new Parcela(conta.getContaData().plusMonths(Long.parseLong(String.valueOf(i))), i, novaConta.getIdConta());
+                System.out.println(conta.getIdConta());
+                this.parcelaRepository.save(parcela);
+            }
+        }else if(conta.getContaTipoCompra().equals("anual")){
+            for (int i = 1; i <= conta.getContaParcelas(); i++){
+                Parcela parcela = new Parcela(conta.getContaData().plusYears(Long.parseLong(String.valueOf(i))), i, novaConta.getIdConta());
+                System.out.println(conta.getIdConta());
+                this.parcelaRepository.save(parcela);
+            }
+        }
     }
+
+
+//    List<Parcela> list = new ArrayList<>();
+//            for (int i = 0; i < conta.getContaParcelas(); i++){
+//        Parcela parcela = new Parcela();
+//        parcela.setData(LocalDate.now().plusMonths(Long.parseLong(String.valueOf(i))));
+//        parcela.setNumero(i);
+//        parcela.setConta(conta);
+//        list.add(parcela);
+////                this.parcelaRepository.save(parcela);
+//    }
+//            conta.setParcela(list);
+
+
+    //Parcela parcela = new Parcela(conta.getContaData(), conta.getContaParcelas(), conta.getIdConta());
+//    this.parcelaRepository.save(parcela);
 
     //MÉTODO PARA ATUALIZAR CONTA
     public void atualizarConta(Contas conta, Long id){

@@ -20,16 +20,10 @@ public class ContaController {
     @Autowired
     private ContaService contaService;
 
-//    @GetMapping("/hello2")
-//    public String sayHello(@RequestParam(value = "myName", defaultValue = "World") String name) {
-//        return String.format("Hello %s!", name);
-//    }
-
 
     //MÉTODO PARA BUSCAR TODAS AS CONTAS
     @GetMapping("/contas")
     public List<Contas> buscarConta(){
-//        System.out.println(this.contaService);
         return this.contaService.buscarContas();
     }
 
@@ -52,5 +46,11 @@ public class ContaController {
         this.contaService.deletarConta(id);
         return "Conta excluída com sucesso";
     }
+
+//    public void valorDaParcela(){
+//        if(this.contaParcelas != null){
+//            contaParcela = this.contaValor/this.contaParcelas;
+//        }
+//    }
 
 }

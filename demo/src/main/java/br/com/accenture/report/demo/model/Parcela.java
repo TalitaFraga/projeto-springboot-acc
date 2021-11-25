@@ -32,7 +32,8 @@ public class Parcela implements Serializable {
     @JoinColumn(name = "conta_id")
     private Contas conta;
 
-    public Parcela(LocalDate contaData, Integer contaParcelas, Long idConta){
+
+    public Parcela(LocalDate contaData, Integer contaParcelas, Long idConta) {
         this.data = contaData;
         this.numero = contaParcelas;
         this.idConta = idConta;
@@ -40,9 +41,8 @@ public class Parcela implements Serializable {
     }
 
 
-    public Parcela( LocalDate data, Integer numero){
-        this.data = data;
-        this.numero = numero;
+    public Parcela() {
+
     }
 }
 

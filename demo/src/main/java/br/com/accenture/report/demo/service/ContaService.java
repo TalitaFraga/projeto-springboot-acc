@@ -3,7 +3,6 @@ package br.com.accenture.report.demo.service;
 import br.com.accenture.report.demo.model.Parcela;
 import br.com.accenture.report.demo.repository.ContaRepository;
 import br.com.accenture.report.demo.repository.ParcelaRepository;
-import ch.qos.logback.core.net.server.Client;
 import lombok.Data;
 import br.com.accenture.report.demo.model.Contas;
 import org.springframework.beans.BeanUtils;
@@ -12,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,27 +23,23 @@ public class ContaService {
     private ParcelaRepository parcelaRepository;
 
     //MÉTODO PARA BUSCAR TODAS AS CONTAS
-    public List<Contas> buscarContas(){
+    public List<Contas> buscarContas() {
         return this.contaRepository.findAll();
     }
 
-    //METODO PARA SALVAR CONTA
-//    public void salvarConta(Contas conta){
-//        this.contaRepository.save(conta);
-//    }
 
     //METODO PARA SALVAR CONTA
-    public void salvarConta(Contas conta){
+    public void salvarConta(Contas conta) {
 
         Contas novaConta = this.contaRepository.save(conta);
-        if(conta.getContaTipoCompra().equals("mensal")){
-            for (int i = 1; i <= conta.getContaParcelas(); i++){
+        if (conta.getContaTipoCompra().equals("mensal")) {
+            for (int i = 1; i <= conta.getContaParcelas(); i++) {
                 Parcela parcela = new Parcela(conta.getContaData().plusMonths(Long.parseLong(String.valueOf(i))), i, novaConta.getIdConta());
                 System.out.println(conta.getIdConta());
                 this.parcelaRepository.save(parcela);
             }
-        }else if(conta.getContaTipoCompra().equals("anual")){
-            for (int i = 1; i <= conta.getContaParcelas(); i++){
+        } else if (conta.getContaTipoCompra().equals("anual")) {
+            for (int i = 1; i <= conta.getContaParcelas(); i++) {
                 Parcela parcela = new Parcela(conta.getContaData().plusYears(Long.parseLong(String.valueOf(i))), i, novaConta.getIdConta());
                 System.out.println(conta.getIdConta());
                 this.parcelaRepository.save(parcela);
@@ -55,23 +48,8 @@ public class ContaService {
     }
 
 
-//    List<Parcela> list = new ArrayList<>();
-//            for (int i = 0; i < conta.getContaParcelas(); i++){
-//        Parcela parcela = new Parcela();
-//        parcela.setData(LocalDate.now().plusMonths(Long.parseLong(String.valueOf(i))));
-//        parcela.setNumero(i);
-//        parcela.setConta(conta);
-//        list.add(parcela);
-////                this.parcelaRepository.save(parcela);
-//    }
-//            conta.setParcela(list);
-
-
-    //Parcela parcela = new Parcela(conta.getContaData(), conta.getContaParcelas(), conta.getIdConta());
-//    this.parcelaRepository.save(parcela);
-
     //MÉTODO PARA ATUALIZAR CONTA
-    public void atualizarConta(Contas conta, Long id){
+    public void atualizarConta(Contas conta, Long id) {
         Contas contaBD = this.contaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Conta não encontrada"));
         conta.setIdConta(id);
         BeanUtils.copyProperties(conta, contaBD, "id");
@@ -79,8 +57,7 @@ public class ContaService {
     }
 
     //MÉTODO PARA DELETAR CONTA
-    public void deletarConta(Long id){
+    public void deletarConta(Long id) {
         this.contaRepository.deleteById(id);
     }
-
 }

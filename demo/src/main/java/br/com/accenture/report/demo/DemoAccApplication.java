@@ -14,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @SpringBootApplication
 @EntityScan(basePackages = "br.com.accenture.report.demo.model")
 @ComponentScan(basePackages = "br.com.accenture.report.demo.*")
-//@ComponentScan(basePackageClasses = ContaController.class)
 @EnableJpaRepositories(basePackages = "br.com.accenture.report.demo.repository")
 @EnableTransactionManagement
 @EnableWebMvc

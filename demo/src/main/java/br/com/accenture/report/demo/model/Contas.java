@@ -1,5 +1,6 @@
 package br.com.accenture.report.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.Getter;
@@ -13,7 +14,8 @@ import java.util.List;
 
 @Entity(name = "conta")
 @Data
-@Getter @Setter
+@Getter
+@Setter
 public class Contas implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,20 +47,18 @@ public class Contas implements Serializable {
     @Column(name = "mes")
     private String contaMes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "conta")
     private List<Parcela> parcela;
-
-//    @Transient
-//    private Integer contaParcela;
 
     @Transient
     private double contaValorParcela;
 
-    public Contas(){
+    public Contas() {
 
     }
 
-    public Contas(String contaDescricao, double contaValor, LocalDate contaData, String contaTipoCompra, Integer contaParcelas, String contaMes){
+    public Contas(String contaDescricao, double contaValor, LocalDate contaData, String contaTipoCompra, Integer contaParcelas, String contaMes) {
         this.contaDescricao = contaDescricao;
         this.contaValor = contaValor;
         this.contaData = contaData;
@@ -69,17 +69,9 @@ public class Contas implements Serializable {
     }
 
 
-//    public Integer getContaParcela() {
-//        return contaParcela;
-//    }
-//
-//    public void setContaParcela(Integer contaParcela) {
-//        this.contaParcela = contaParcela;
-//    }
-
     public double getContaValorParcela() {
-        if(this.contaParcelas != null){
-            contaValorParcela = this.contaValor/this.contaParcelas;
+        if (this.contaParcelas != null) {
+            contaValorParcela = this.contaValor / this.contaParcelas;
         } else {
             this.contaValorParcela = this.contaValor;
         }
